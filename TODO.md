@@ -1,5 +1,2 @@
-# TODO
-
-- [x] Update Register.jsx to connect to register API
-- [x] Update Login.jsx to connect to login API
-- [x] Test the API integration (Register gets 500 Internal Server Error - backend issue, not frontend. Login may have similar issues.)
+- [x] Modernize Login UI: Remove emojis, update color scheme to subdued tones, simplify design
+- [ ] Total UI Revamp: Remove purple colors from all components, update to consistent dark theme (slate/gray/cyan/blue)

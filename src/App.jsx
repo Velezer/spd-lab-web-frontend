@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./component/Header.jsx";
 import Footer from "./component/Footer.jsx";
@@ -15,18 +15,28 @@ function App() {
   const [currentView, setCurrentView] = useState("home");
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const handleLogin = (userData) => {
     setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
     setCurrentView("home");
   };
 
   const handleRegister = (userData) => {
     setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
     setCurrentView("home");
   };
 
   const handleLogout = () => {
     setUser(null);
+    localStorage.removeItem("user");
     setCurrentView("home");
   };
 
@@ -57,7 +67,7 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
         <Header user={user} />
         <main className="flex-1">
           <Routes>
