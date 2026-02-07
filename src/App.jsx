@@ -13,7 +13,6 @@ import Orders from "./marketplace/page/Orders.jsx";
 import AdminLayout from "./admin/pages/AdminLayout.jsx";
 import Dashboard from "./admin/pages/Dashboard.jsx";
 import AdminProducts from "./admin/pages/Products.jsx";
-import AdminUsers from "./admin/pages/Users.jsx";
 import AdminOrders from "./admin/pages/Orders.jsx";
 import AdminSettings from "./admin/pages/Settings.jsx";
 import AdminProfile from "./admin/pages/AdminProfile.jsx";
@@ -129,7 +128,6 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<AdminProducts />} />
-          <Route path="users" element={<AdminUsers />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route
             path="profile"
