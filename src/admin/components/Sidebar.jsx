@@ -9,7 +9,7 @@ function Sidebar() {
     { path: "/admin/products", label: "Products", icon: "📦" },
     { path: "/admin/users", label: "Users", icon: "👥" },
     { path: "/admin/orders", label: "Orders", icon: "📋" },
-    { path: "/profile", label: "Profile", icon: "👤" },
+    { path: "profile", label: "Profile", icon: "👤" },
     { path: "/", label: "Marketplace", icon: "🏪" },
   ];
 
