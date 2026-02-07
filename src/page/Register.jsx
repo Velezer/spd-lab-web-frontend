@@ -10,36 +10,16 @@ function Register({ onSwitchToLogin, onRegister }) {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const response = await fetch(
-        "https://spd-tp-backend-e61bb0fea8a6.herokuapp.com/api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-          }),
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Register gagal");
-        return;
-      }
-
-      onRegister(data);
-    } catch (error) {
-      console.error(error);
-      alert("Network error");
-    } finally {
+    // Simulate registration without API call
+    setTimeout(() => {
+      const userData = {
+        id: Date.now(),
+        name,
+        email,
+      };
+      onRegister(userData);
       setLoading(false);
-    }
+    }, 1000); // Simulate network delay
   };
 
   return (

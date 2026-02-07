@@ -9,35 +9,20 @@ function Login({ onSwitchToRegister, onLogin }) {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const response = await fetch(
-        "https://spd-lab-backend-db797613f87b.herokuapp.com/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Login gagal");
-        return;
+    // Simulate login without API call
+    setTimeout(() => {
+      if (email && password) {
+        const userData = {
+          id: Date.now(),
+          email,
+          name: email.split("@")[0], // Simple name from email
+        };
+        onLogin(userData);
+      } else {
+        alert("Please enter email and password");
       }
-
-      onLogin(data);
-    } catch (error) {
-      console.error(error);
-      alert("Network error");
-    } finally {
       setLoading(false);
-    }
+    }, 1000); // Simulate network delay
   };
 
   return (
