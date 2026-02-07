@@ -9,6 +9,7 @@ import Register from "./page/Register.jsx";
 import Profile from "./page/Profile.jsx";
 import ProductDetail from "./page/ProductDetail.jsx";
 import Cart from "./page/Cart.jsx";
+import Orders from "./page/Orders.jsx";
 
 function App() {
   const [currentView, setCurrentView] = useState("home");
@@ -62,6 +63,7 @@ function App() {
           <Routes>
             <Route path="/" element={renderMain()} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/orders" element={<Orders />} />
             <Route path="/product/:id" element={<ProductDetail />} />
           </Routes>
         </main>

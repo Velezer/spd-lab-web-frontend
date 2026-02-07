@@ -51,28 +51,34 @@ function Header({ user, onNavigate }) {
             >
               Home
             </button>
-            <button
-              onClick={() => navigate("/cart")}
-              className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
-            >
-              Cart
-            </button>
             {user ? (
-              <button
-                onClick={() => onNavigate("profile")}
-                className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
-              >
-                Profil
-              </button>
-            ) : (
               <>
                 <button
-                  onClick={() => onNavigate("login")}
+                  onClick={() => navigate("/cart")}
                   className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
                 >
-                  Login
+                  Cart
+                </button>
+                <button
+                  onClick={() => navigate("/orders")}
+                  className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
+                >
+                  Orders
+                </button>
+                <button
+                  onClick={() => onNavigate("profile")}
+                  className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
+                >
+                  Profil
                 </button>
               </>
+            ) : (
+              <button
+                onClick={() => onNavigate("login")}
+                className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
+              >
+                Login
+              </button>
             )}
           </nav>
 
