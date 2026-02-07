@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
-function Profile({ user, onLogout }) {
-  const navigate = useNavigate();
+function AdminProfile({ user, onLogout }) {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -108,10 +106,10 @@ function Profile({ user, onLogout }) {
   const displayData = profileData || user;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="p-8">
+      <div className="max-w-4xl mx-auto">
         <div className="bg-slate-800/50 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-slate-700/50">
-          <div className="text-center">
+          <div className="text-center mb-8">
             <div className="mx-auto h-20 w-20 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center mb-4">
               <svg
                 className="h-10 w-10 text-white"
@@ -127,10 +125,14 @@ function Profile({ user, onLogout }) {
                 />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Your Profile</h2>
-            <p className="text-slate-300">Manage your account information</p>
+            <h2 className="text-3xl font-bold text-white mb-2">
+              Admin Profile
+            </h2>
+            <p className="text-slate-300">
+              Manage your admin account information
+            </p>
           </div>
-          <div className="mt-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
@@ -159,20 +161,32 @@ function Profile({ user, onLogout }) {
                 </div>
               )}
             </div>
-            <div className="pt-4 space-y-4">
-              <button
-                onClick={() => navigate("/admin")}
-                className="group relative w-full flex justify-center py-4 px-4 border-0 text-sm font-bold rounded-xl text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Admin Panel
-              </button>
-              <button
-                onClick={onLogout}
-                className="group relative w-full flex justify-center py-4 px-4 border-0 text-sm font-bold rounded-xl text-white bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Logout
-              </button>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Role
+                </label>
+                <div className="px-4 py-3 border-0 rounded-xl bg-slate-700/50 backdrop-blur-sm text-white font-medium">
+                  Administrator
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Last Login
+                </label>
+                <div className="px-4 py-3 border-0 rounded-xl bg-slate-700/50 backdrop-blur-sm text-white font-medium">
+                  {new Date().toLocaleDateString()}
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="text-center">
+            <button
+              onClick={onLogout}
+              className="group relative w-full flex justify-center py-4 px-4 border-0 text-sm font-bold rounded-xl text-white bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -180,4 +194,4 @@ function Profile({ user, onLogout }) {
   );
 }
 
-export default Profile;
+export default AdminProfile;

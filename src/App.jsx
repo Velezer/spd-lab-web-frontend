@@ -10,6 +10,12 @@ import Profile from "./marketplace/page/Profile.jsx";
 import ProductDetail from "./marketplace/page/ProductDetail.jsx";
 import Cart from "./marketplace/page/Cart.jsx";
 import Orders from "./marketplace/page/Orders.jsx";
+import AdminLayout from "./admin/pages/AdminLayout.jsx";
+import Dashboard from "./admin/pages/Dashboard.jsx";
+import AdminProducts from "./admin/pages/Products.jsx";
+import AdminUsers from "./admin/pages/Users.jsx";
+import AdminOrders from "./admin/pages/Orders.jsx";
+import AdminSettings from "./admin/pages/Settings.jsx";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -34,27 +40,103 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
-        <Header user={user} />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<ProductList />} />
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route
-              path="/register"
-              element={<Register onRegister={handleRegister} />}
-            />
-            <Route
-              path="/profile"
-              element={<Profile user={user} onLogout={handleLogout} />}
-            />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <ProductList />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <Login onLogin={handleLogin} />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <Register onRegister={handleRegister} />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <Profile user={user} onLogout={handleLogout} />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <Cart />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <Orders />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <ProductDetail />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route
+            path="profile"
+            element={<AdminProfile user={user} onLogout={handleLogout} />}
+          />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }
