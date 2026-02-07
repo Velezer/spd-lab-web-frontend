@@ -16,6 +16,7 @@ import AdminProducts from "./admin/pages/Products.jsx";
 import AdminUsers from "./admin/pages/Users.jsx";
 import AdminOrders from "./admin/pages/Orders.jsx";
 import AdminSettings from "./admin/pages/Settings.jsx";
+import AdminProfile from "./admin/pages/AdminProfile.jsx";
 
 function App() {
   const [user, setUser] = useState(() => {
