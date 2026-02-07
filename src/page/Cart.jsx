@@ -37,7 +37,10 @@ function Cart() {
             <p className="text-slate-300 mb-6">
               Start shopping to add items to your cart
             </p>
-            <button className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <button
+              onClick={() => (window.location.href = "/")}
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
               Continue Shopping
             </button>
           </div>

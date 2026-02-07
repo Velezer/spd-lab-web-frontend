@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Login({ onSwitchToRegister, onLogin }) {
+function Login({ onLogin }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,6 +34,7 @@ function Login({ onSwitchToRegister, onLogin }) {
       }
 
       onLogin(data);
+      navigate("/");
     } catch (error) {
       console.error(error);
       alert("Network error");
@@ -106,7 +109,7 @@ function Login({ onSwitchToRegister, onLogin }) {
             <div className="text-center">
               <button
                 type="button"
-                onClick={onSwitchToRegister}
+                onClick={() => navigate("/register")}
                 className="text-white/80 hover:text-white font-medium transition-colors duration-300"
               >
                 Don't have an account?{" "}

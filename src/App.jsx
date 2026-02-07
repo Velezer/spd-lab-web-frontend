@@ -58,10 +58,32 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        <Header user={user} onNavigate={setCurrentView} />
+        <Header user={user} />
         <main className="flex-1">
           <Routes>
-            <Route path="/" element={renderMain()} />
+            <Route path="/" element={<ProductList />} />
+            <Route
+              path="/login"
+              element={
+                <Login
+                  onSwitchToRegister={() => setCurrentView("register")}
+                  onLogin={handleLogin}
+                />
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Register
+                  onSwitchToLogin={() => setCurrentView("login")}
+                  onRegister={handleRegister}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={<Profile user={user} onLogout={handleLogout} />}
+            />
             <Route path="/cart" element={<Cart />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/product/:id" element={<ProductDetail />} />

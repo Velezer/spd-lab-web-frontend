@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function Header({ user, onNavigate }) {
+function Header({ user }) {
   const navigate = useNavigate();
   return (
     <header className="bg-gradient-to-r from-slate-800/90 to-slate-900/90 backdrop-blur-md shadow-lg border-b border-slate-700/50">
@@ -11,7 +11,7 @@ function Header({ user, onNavigate }) {
           <div className="flex-shrink-0">
             <h1
               className="text-2xl font-bold text-white cursor-pointer hover:text-cyan-400 transition-colors duration-300"
-              onClick={() => onNavigate("home")}
+              onClick={() => navigate("/")}
             >
               MarketPlace
             </h1>
@@ -66,7 +66,7 @@ function Header({ user, onNavigate }) {
                   Orders
                 </button>
                 <button
-                  onClick={() => onNavigate("profile")}
+                  onClick={() => navigate("/profile")}
                   className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
                 >
                   Profil
@@ -74,7 +74,7 @@ function Header({ user, onNavigate }) {
               </>
             ) : (
               <button
-                onClick={() => onNavigate("login")}
+                onClick={() => navigate("/login")}
                 className="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors duration-300"
               >
                 Login
