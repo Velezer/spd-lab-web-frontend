@@ -54,11 +54,18 @@ function Products() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Convert price and quantity to numbers
+      const productData = {
+        ...newProduct,
+        price: parseFloat(newProduct.price),
+        quantity: parseInt(newProduct.quantity, 10),
+      };
+
       if (isEditing) {
         // Update existing product
         const response = await ProductClient.updateProduct(
           editingProductId,
-          newProduct,
+          productData,
         );
         if (response.status < 200 || response.status >= 300) {
           throw new Error("Failed to update product");
@@ -67,7 +74,7 @@ function Products() {
         setEditingProductId(null);
       } else {
         // Add new product
-        const response = await ProductClient.createProduct(newProduct);
+        const response = await ProductClient.createProduct(productData);
         if (response.status !== 201) {
           throw new Error("Failed to add product");
         }
