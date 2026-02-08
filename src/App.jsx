@@ -20,6 +20,7 @@ import AdminOrderDetail from "./admin/pages/OrderDetail.jsx";
 import AdminSettings from "./admin/pages/Settings.jsx";
 import AdminProfile from "./admin/pages/AdminProfile.jsx";
 import ProductClient from "./api/ProductClient";
+import LogRocket from 'logrocket'
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -31,20 +32,45 @@ function App() {
     ProductClient.init();
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      const userId = user.id || user.email || user.username || 'unknown';
+      LogRocket.identify(userId, {
+        name: user.name,
+        email: user.email,
+      });
+    }
+  }, [user]);
+
   const handleLogin = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    const userId = userData.id || userData.email || userData.username || 'unknown';
+    LogRocket.identify(userId, {
+      name: userData.name,
+      email: userData.email,
+    });
   };
 
   const handleRegister = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    const userId = userData.id || userData.email || userData.username || 'unknown';
+    LogRocket.identify(userId, {
+      name: userData.name,
+      email: userData.email,
+    });
   };
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    try {
+      LogRocket.identify('guest');
+    } catch (e) {
+      // ignore if LogRocket not available
+    }
   };
 
   return (
