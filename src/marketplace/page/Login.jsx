@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthClient from "../../api/AuthClient";
 
 function Login({ onLogin }) {
   const navigate = useNavigate();
@@ -12,28 +13,14 @@ function Login({ onLogin }) {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        },
-      );
+      const response = await AuthClient.login({ email, password });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Login gagal");
+      if (response.status !== 200) {
+        alert(response.data.message || "Login gagal");
         return;
       }
 
-      onLogin(data);
+      onLogin(response.data);
       navigate("/");
     } catch (error) {
       console.error(error);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ProductClient from "../../api/ProductClient";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -21,13 +22,11 @@ function Products() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/products`,
-      );
-      if (!response.ok) {
+      const response = await ProductClient.getProducts();
+      if (response.status !== 200) {
         throw new Error("Failed to fetch products");
       }
-      const data = await response.json();
+      const data = response.data;
       setProducts(data);
     } catch (err) {
       setError(err.message);

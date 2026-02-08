@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import ProductClient from "../../api/ProductClient";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -11,16 +12,14 @@ function ProductDetail() {
     const fetchProductDetail = async () => {
       try {
         console.log("Fetching product detail for ID:", id);
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/products/${id}`,
-        );
+        const response = await ProductClient.getProductById(id);
         console.log("Response status:", response.status);
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error(
             `Failed to fetch product: ${response.status} ${response.statusText}`,
           );
         }
-        const data = await response.json();
+        const data = response.data;
         console.log("Fetched product detail:", data);
         setProduct(data);
       } catch (err) {
@@ -96,7 +95,10 @@ function ProductDetail() {
             {/* Product Image */}
             <div className="relative overflow-hidden">
               <img
-                src={`https://picsum.photos/600/400?random=${product._id}`}
+                src={
+                  product.imgUrl ||
+                  `https://picsum.photos/600/400?random=${product._id}`
+                }
                 alt={product.name}
                 className="w-full h-96 lg:h-full object-cover"
               />

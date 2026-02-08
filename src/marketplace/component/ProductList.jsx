@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ProductClient from "../../api/ProductClient";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
@@ -11,16 +12,14 @@ function ProductList() {
     const fetchProducts = async () => {
       try {
         console.log("Fetching products...");
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/products/`,
-        );
+        const response = await ProductClient.getProducts();
         console.log("Response status:", response.status);
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error(
             `Failed to fetch products: ${response.status} ${response.statusText}`,
           );
         }
-        const data = await response.json();
+        const data = response.data;
         console.log("Fetched data:", data);
         // Transform the data to match our component structure
         const transformedProducts = data.map((product) => ({
@@ -28,7 +27,9 @@ function ProductList() {
           name: product.name,
           price: `Rp ${product.price.toLocaleString("id-ID")}`,
           quantity: product.quantity,
-          image: `https://picsum.photos/300/200?random=${product.id}`,
+          image:
+            product.imgUrl ||
+            `https://picsum.photos/300/200?random=${product._id}`,
         }));
         console.log("Transformed products:", transformedProducts);
         setProducts(transformedProducts);

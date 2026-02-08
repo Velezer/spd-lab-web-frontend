@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthClient from "../../api/AuthClient";
 
 function Register({ onRegister }) {
   const navigate = useNavigate();
@@ -13,29 +14,14 @@ function Register({ onRegister }) {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-          }),
-        },
-      );
+      const response = await AuthClient.register({ name, email, password });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Register gagal");
+      if (response.status !== 200) {
+        alert(response.data.message || "Register gagal");
         return;
       }
 
-      onRegister(data);
+      onRegister(response.data);
       navigate("/");
     } catch (error) {
       console.error(error);

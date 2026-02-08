@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthClient from "../../api/AuthClient";
 
 function Profile({ user, onLogout }) {
   const navigate = useNavigate();
@@ -15,23 +16,13 @@ function Profile({ user, onLogout }) {
       }
 
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
+        const response = await AuthClient.getProfile(user.token);
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error("Failed to fetch profile data");
         }
 
-        const data = await response.json();
-        setProfileData(data);
+        setProfileData(response.data);
       } catch (err) {
         console.error("Error fetching profile:", err);
         setError(err.message);
