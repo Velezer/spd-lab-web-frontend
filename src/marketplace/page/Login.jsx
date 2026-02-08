@@ -20,6 +20,7 @@ function Login({ onLogin }) {
         return;
       }
 
+      localStorage.setItem("token", response.data.token);
       onLogin(response.data);
       navigate("/");
     } catch (error) {

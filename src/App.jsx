@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./marketplace/component/Header.jsx";
 import Footer from "./marketplace/component/Footer.jsx";
@@ -16,12 +16,17 @@ import AdminProducts from "./admin/pages/Products.jsx";
 import AdminOrders from "./admin/pages/Orders.jsx";
 import AdminSettings from "./admin/pages/Settings.jsx";
 import AdminProfile from "./admin/pages/AdminProfile.jsx";
+import ProductClient from "./api/ProductClient";
 
 function App() {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+
+  useEffect(() => {
+    ProductClient.init();
+  }, []);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -36,6 +41,7 @@ function App() {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (

@@ -12,11 +12,14 @@ function Products() {
     description: "",
     imgUrl: "",
   });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingProductId, setEditingProductId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   useEffect(() => {
+    ProductClient.init();
     fetchProducts();
   }, []);
 
@@ -27,7 +30,12 @@ function Products() {
         throw new Error("Failed to fetch products");
       }
       const data = response.data;
-      setProducts(data);
+      // Map products to ensure id field is set (handle MongoDB _id)
+      const mappedProducts = data.map((product) => ({
+        ...product,
+        id: product._id || product.id,
+      }));
+      setProducts(mappedProducts);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -46,15 +54,23 @@ function Products() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProduct),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to add product");
+      if (isEditing) {
+        // Update existing product
+        const response = await ProductClient.updateProduct(
+          editingProductId,
+          newProduct,
+        );
+        if (response.status < 200 || response.status >= 300) {
+          throw new Error("Failed to update product");
+        }
+        setIsEditing(false);
+        setEditingProductId(null);
+      } else {
+        // Add new product
+        const response = await ProductClient.createProduct(newProduct);
+        if (response.status !== 201) {
+          throw new Error("Failed to add product");
+        }
       }
       setNewProduct({
         name: "",
@@ -66,6 +82,32 @@ function Products() {
       fetchProducts(); // Refresh the list
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const handleEdit = (product) => {
+    setIsEditing(true);
+    setEditingProductId(product.id);
+    setNewProduct({
+      name: product.name,
+      price: product.price,
+      quantity: product.quantity,
+      description: product.description,
+      imgUrl: product.imgUrl,
+    });
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        const response = await ProductClient.deleteProduct(id);
+        if (response.status !== 200) {
+          throw new Error("Failed to delete product");
+        }
+        fetchProducts(); // Refresh the list
+      } catch (err) {
+        setError(err.message);
+      }
     }
   };
 
@@ -101,7 +143,9 @@ function Products() {
         onSubmit={handleSubmit}
         className="bg-slate-800 p-6 rounded-lg shadow-lg mb-8"
       >
-        <h2 className="text-xl font-bold text-white mb-4">Add New Product</h2>
+        <h2 className="text-xl font-bold text-white mb-4">
+          {isEditing ? "Edit Product" : "Add New Product"}
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="text"
@@ -153,8 +197,27 @@ function Products() {
           type="submit"
           className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded mt-4"
         >
-          Add Product
+          {isEditing ? "Update Product" : "Add Product"}
         </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => {
+              setIsEditing(false);
+              setEditingProductId(null);
+              setNewProduct({
+                name: "",
+                price: "",
+                quantity: "",
+                description: "",
+                imgUrl: "",
+              });
+            }}
+            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded mt-4 ml-2"
+          >
+            Cancel
+          </button>
+        )}
       </form>
       <div className="mb-4">
         <input
@@ -203,10 +266,16 @@ function Products() {
                     />
                   </td>
                   <td className="px-6 py-4">
-                    <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-1 rounded mr-2">
+                    <button
+                      onClick={() => handleEdit(product)}
+                      className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-1 rounded mr-2"
+                    >
                       Edit
                     </button>
-                    <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                    <button
+                      onClick={() => handleDelete(product.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                    >
                       Delete
                     </button>
                   </td>
