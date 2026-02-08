@@ -156,17 +156,11 @@ function ProductDetail() {
                     {product._id}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-3 border-b border-slate-700/50">
-                  <span className="text-slate-400">Created:</span>
-                  <span className="text-white">
-                    {new Date(product.createdAt).toLocaleDateString("id-ID")}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-slate-700/50">
-                  <span className="text-slate-400">Last Updated:</span>
-                  <span className="text-white">
-                    {new Date(product.updatedAt).toLocaleDateString("id-ID")}
-                  </span>
+                <div className="py-3 border-b border-slate-700/50">
+                  <span className="text-slate-400">Description:</span>
+                  <p className="text-white mt-2">
+                    {product.description || "No description available."}
+                  </p>
                 </div>
               </div>
 
