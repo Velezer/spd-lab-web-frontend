@@ -13,7 +13,7 @@ function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-slate-800 h-full shadow-lg">
+    <div className="w-64 bg-slate-800 h-screen shadow-lg fixed top-0 left-0 z-10">
       <div className="p-6">
         <h2 className="text-2xl font-bold text-white">Admin Panel</h2>
       </div>
