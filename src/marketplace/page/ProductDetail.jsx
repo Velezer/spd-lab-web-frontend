@@ -183,9 +183,6 @@ function ProductDetail() {
                 >
                   Add to Cart
                 </button>
-                <button className="w-full bg-slate-700/50 hover:bg-slate-600/50 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 border border-slate-600/50 text-lg">
-                  Add to Wishlist
-                </button>
               </div>
             </div>
           </div>
