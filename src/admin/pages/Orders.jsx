@@ -1,29 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import OrderClient from "../../api/OrderClient";
 
 function Orders() {
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      customer: "John Doe",
-      total: 250,
-      status: "Completed",
-      date: "2023-05-01",
-    },
-    {
-      id: 2,
-      customer: "Jane Smith",
-      total: 150,
-      status: "Pending",
-      date: "2023-05-02",
-    },
-    {
-      id: 3,
-      customer: "Bob Johnson",
-      total: 300,
-      status: "Shipped",
-      date: "2023-05-03",
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [updating, setUpdating] = useState(null); // Track which order is being updated
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        OrderClient.init();
+        const response = await OrderClient.getOrders();
+        const ordersData = response.data?.orders || response.data || [];
+        setOrders(Array.isArray(ordersData) ? ordersData : []);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+        setError(err.response?.data?.message || "Failed to load orders");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  const handleStatusUpdate = async (orderId, newStatus) => {
+    setUpdating(orderId);
+    try {
+      await OrderClient.updateOrderStatus(orderId, newStatus);
+      // Update local state
+      setOrders(
+        orders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order,
+        ),
+      );
+    } catch (err) {
+      console.error("Error updating status:", err);
+      setError("Failed to update order status");
+    } finally {
+      setUpdating(null);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="p-8">
+        <h1 className="text-3xl font-bold text-white mb-8">
+          Orders Management
+        </h1>
+        <div className="flex justify-center items-center min-h-64">
+          <div className="text-white">Loading orders...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8">
+        <h1 className="text-3xl font-bold text-white mb-8">
+          Orders Management
+        </h1>
+        <div className="flex justify-center items-center min-h-64">
+          <div className="bg-red-500/20 border border-red-500/50 text-red-400 p-6 rounded-lg text-center">
+            {error}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8">
@@ -33,7 +80,6 @@ function Orders() {
           <thead className="bg-slate-700">
             <tr>
               <th className="px-6 py-3 text-gray-300">Order ID</th>
-              <th className="px-6 py-3 text-gray-300">Customer</th>
               <th className="px-6 py-3 text-gray-300">Total</th>
               <th className="px-6 py-3 text-gray-300">Status</th>
               <th className="px-6 py-3 text-gray-300">Date</th>
@@ -42,31 +88,44 @@ function Orders() {
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr key={order.id} className="border-t border-slate-600">
-                <td className="px-6 py-4 text-gray-300">#{order.id}</td>
-                <td className="px-6 py-4 text-white">{order.customer}</td>
-                <td className="px-6 py-4 text-cyan-400">${order.total}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${
-                      order.status === "Completed"
-                        ? "bg-green-500 text-white"
-                        : order.status === "Pending"
-                          ? "bg-yellow-500 text-black"
-                          : "bg-blue-500 text-white"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
+              <tr key={order._id} className="border-t border-slate-600">
+                <td className="px-6 py-4 text-gray-300">
+                  #{order._id.slice(-8)}
                 </td>
-                <td className="px-6 py-4 text-gray-300">{order.date}</td>
+                <td className="px-6 py-4 text-cyan-400">
+                  Rp {order.totalPrice?.toLocaleString("id-ID") || 0}
+                </td>
                 <td className="px-6 py-4">
-                  <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-1 rounded mr-2">
+                  <select
+                    value={order.status || "Pending"}
+                    onChange={(e) =>
+                      handleStatusUpdate(order._id, e.target.value)
+                    }
+                    disabled={updating === order._id}
+                    className="bg-slate-600 text-white px-2 py-1 rounded text-xs"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </td>
+                <td className="px-6 py-4 text-gray-300">
+                  {new Date(order.createdAt).toLocaleDateString("id-ID")}
+                </td>
+                <td className="px-6 py-4">
+                  <Link
+                    to={`/admin/order/${order._id}`}
+                    className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-1 rounded mr-2"
+                  >
                     View
-                  </button>
-                  <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
-                    Cancel
-                  </button>
+                  </Link>
+                  {updating === order._id && (
+                    <span className="text-yellow-400 text-sm ml-2">
+                      Updating...
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}

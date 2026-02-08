@@ -16,6 +16,7 @@ import AdminLayout from "./admin/pages/AdminLayout.jsx";
 import Dashboard from "./admin/pages/Dashboard.jsx";
 import AdminProducts from "./admin/pages/Products.jsx";
 import AdminOrders from "./admin/pages/Orders.jsx";
+import AdminOrderDetail from "./admin/pages/OrderDetail.jsx";
 import AdminSettings from "./admin/pages/Settings.jsx";
 import AdminProfile from "./admin/pages/AdminProfile.jsx";
 import ProductClient from "./api/ProductClient";
@@ -161,6 +162,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
+          <Route path="order/:id" element={<AdminOrderDetail />} />
           <Route
             path="profile"
             element={<AdminProfile user={user} onLogout={handleLogout} />}

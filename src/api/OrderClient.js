@@ -35,6 +35,10 @@ const OrderClient = {
 
     getOrderById(id) {
         return this.axiosInstance.get(`/${id}`);
+    },
+
+    updateOrderStatus(id, status) {
+        return this.axiosInstance.put(`/${id}/status`, { status });
     }
 };
 
