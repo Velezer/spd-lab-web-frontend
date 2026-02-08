@@ -123,15 +123,6 @@ function ProductList() {
               <p className="text-slate-400 text-sm mb-4">
                 Stock: {product.quantity}
               </p>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add to cart functionality here
-                }}
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                Add to Cart
-              </button>
             </div>
           </div>
         ))}

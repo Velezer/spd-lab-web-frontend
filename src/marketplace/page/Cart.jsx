@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 function Cart() {
-  // Dummy data untuk tampilan saja
-  const cartItems = []; // Kosongkan dulu untuk tampilan
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCartItems(cart);
+  }, []);
+
+  const updateQuantity = (id, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeItem(id);
+      return;
+    }
+    const updatedCart = cartItems.map((item) =>
+      item.id === id ? { ...item, quantity: newQuantity } : item,
+    );
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  const removeItem = (id) => {
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => {
+      const price = parseInt(item.price.replace(/[^\d]/g, ""));
+      return total + price * item.quantity;
+    }, 0);
+  };
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -66,16 +95,29 @@ function Cart() {
                     </h3>
                     <p className="text-cyan-400 font-medium">{item.price}</p>
                     <div className="flex items-center space-x-2 mt-2">
-                      <button className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded">
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
+                        className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded"
+                      >
                         -
                       </button>
                       <span className="text-white">{item.quantity}</span>
-                      <button className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded">
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
+                        className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded"
+                      >
                         +
                       </button>
                     </div>
                   </div>
-                  <button className="text-red-400 hover:text-red-300">
+                  <button
+                    onClick={() => removeItem(item.id)}
+                    className="text-red-400 hover:text-red-300"
+                  >
                     <svg
                       className="w-6 h-6"
                       fill="none"
@@ -103,7 +145,7 @@ function Cart() {
             <div className="space-y-4">
               <div className="flex justify-between text-slate-300">
                 <span>Subtotal</span>
-                <span>Rp 0</span>
+                <span>Rp {calculateTotal().toLocaleString("id-ID")}</span>
               </div>
               <div className="flex justify-between text-slate-300">
                 <span>Shipping</span>
@@ -112,7 +154,7 @@ function Cart() {
               <div className="border-t border-slate-700 pt-4">
                 <div className="flex justify-between text-white font-bold text-xl">
                   <span>Total</span>
-                  <span>Rp 0</span>
+                  <span>Rp {calculateTotal().toLocaleString("id-ID")}</span>
                 </div>
               </div>
             </div>

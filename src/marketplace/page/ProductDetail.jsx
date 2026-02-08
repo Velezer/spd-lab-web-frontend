@@ -7,6 +7,32 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showQuantityModal, setShowQuantityModal] = useState(false);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [cartError, setCartError] = useState(null);
+
+  const addToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existingItem = cart.find((item) => item.id === product._id);
+    if (existingItem) {
+      existingItem.quantity = selectedQuantity;
+    } else {
+      cart.push({
+        id: product._id,
+        name: product.name,
+        price: `Rp ${product.price.toLocaleString("id-ID")}`,
+        quantity: selectedQuantity,
+        image:
+          product.imgUrl ||
+          `https://picsum.photos/300/200?random=${product._id}`,
+      });
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setShowQuantityModal(false);
+    setShowSuccessModal(true);
+    setSelectedQuantity(1); // Reset quantity for next use
+  };
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -146,7 +172,21 @@ function ProductDetail() {
 
               {/* Action Buttons */}
               <div className="space-y-4">
-                <button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-lg">
+                <button
+                  onClick={() => {
+                    const cart = JSON.parse(
+                      localStorage.getItem("cart") || "[]",
+                    );
+                    const existingItem = cart.find(
+                      (item) => item.id === product._id,
+                    );
+                    setSelectedQuantity(
+                      existingItem ? existingItem.quantity : 1,
+                    );
+                    setShowQuantityModal(true);
+                  }}
+                  className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-lg"
+                >
                   Add to Cart
                 </button>
                 <button className="w-full bg-slate-700/50 hover:bg-slate-600/50 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 border border-slate-600/50 text-lg">
@@ -157,6 +197,85 @@ function ProductDetail() {
           </div>
         </div>
       </div>
+
+      {/* Quantity Selection Modal */}
+      {showQuantityModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-800 rounded-xl p-8 max-w-sm mx-4 border border-slate-700">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Select Quantity
+            </h3>
+            <p className="text-slate-300 mb-6">
+              How many items would you like to add?
+            </p>
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <button
+                onClick={() => {
+                  setSelectedQuantity(Math.max(1, selectedQuantity - 1));
+                  setCartError(null); // Clear error when adjusting quantity
+                }}
+                className="bg-slate-700 hover:bg-slate-600 text-white w-10 h-10 rounded-full font-bold text-xl transition-colors"
+              >
+                -
+              </button>
+              <span className="text-white text-2xl font-bold w-12 text-center">
+                {selectedQuantity}
+              </span>
+              <button
+                onClick={() => {
+                  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+                  const existingItem = cart.find(
+                    (item) => item.id === product._id,
+                  );
+                  const currentCartQuantity = existingItem
+                    ? existingItem.quantity
+                    : 0;
+                  const maxAllowed = product.quantity - currentCartQuantity;
+                  setSelectedQuantity(
+                    Math.min(maxAllowed, selectedQuantity + 1),
+                  );
+                }}
+                className="bg-slate-700 hover:bg-slate-600 text-white w-10 h-10 rounded-full font-bold text-xl transition-colors"
+              >
+                +
+              </button>
+            </div>
+            {cartError && (
+              <p className="text-red-400 text-sm mb-4">{cartError}</p>
+            )}
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowQuantityModal(false)}
+                className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={addToCart}
+                className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-800 rounded-xl p-8 max-w-sm mx-4 border border-slate-700">
+            <h3 className="text-2xl font-bold text-white mb-4">Success!</h3>
+            <p className="text-slate-300 mb-6">Product added to cart!</p>
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
