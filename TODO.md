@@ -1,2 +1,0 @@
-- [x] Modernize Login UI: Remove emojis, update color scheme to subdued tones, simplify design
-- [ ] Total UI Revamp: Remove purple colors from all components, update to consistent dark theme (slate/gray/cyan/blue)

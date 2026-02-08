@@ -16,7 +16,7 @@ function Profile({ user, onLogout }) {
 
       try {
         const response = await fetch(
-          "https://spd-lab-backend-db797613f87b.herokuapp.com/api/auth/me",
+          `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
           {
             method: "GET",
             headers: {

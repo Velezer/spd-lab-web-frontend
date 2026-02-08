@@ -1,43 +1,47 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProductList() {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const navigate = useNavigate()
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log('Fetching products...')
-        const response = await fetch('/api/products/')
-        console.log('Response status:', response.status)
+        console.log("Fetching products...");
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/products/`,
+        );
+        console.log("Response status:", response.status);
         if (!response.ok) {
-          throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`)
+          throw new Error(
+            `Failed to fetch products: ${response.status} ${response.statusText}`,
+          );
         }
-        const data = await response.json()
-        console.log('Fetched data:', data)
+        const data = await response.json();
+        console.log("Fetched data:", data);
         // Transform the data to match our component structure
-        const transformedProducts = data.map(product => ({
+        const transformedProducts = data.map((product) => ({
           id: product._id,
           name: product.name,
-          price: `Rp ${product.price.toLocaleString('id-ID')}`,
+          price: `Rp ${product.price.toLocaleString("id-ID")}`,
           quantity: product.quantity,
-          image: `https://picsum.photos/300/200?random=${product.id}`
-        }))
-        console.log('Transformed products:', transformedProducts)
-        setProducts(transformedProducts)
+          image: `https://picsum.photos/300/200?random=${product.id}`,
+        }));
+        console.log("Transformed products:", transformedProducts);
+        setProducts(transformedProducts);
       } catch (err) {
-        console.error('Error fetching products:', err)
-        setError(err.message)
+        console.error("Error fetching products:", err);
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchProducts()
-  }, [])
+    fetchProducts();
+  }, []);
 
   if (loading) {
     return (
@@ -46,13 +50,16 @@ function ProductList() {
           <h2 className="text-5xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
             Amazing Products
           </h2>
-          <p className="text-slate-300 text-xl max-w-2xl mx-auto">Discover our curated collection of premium items designed for modern lifestyles</p>
+          <p className="text-slate-300 text-xl max-w-2xl mx-auto">
+            Discover our curated collection of premium items designed for modern
+            lifestyles
+          </p>
         </div>
         <div className="flex justify-center items-center min-h-64">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-400"></div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -62,16 +69,21 @@ function ProductList() {
           <h2 className="text-5xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
             Amazing Products
           </h2>
-          <p className="text-slate-300 text-xl max-w-2xl mx-auto">Discover our curated collection of premium items designed for modern lifestyles</p>
+          <p className="text-slate-300 text-xl max-w-2xl mx-auto">
+            Discover our curated collection of premium items designed for modern
+            lifestyles
+          </p>
         </div>
         <div className="flex justify-center items-center min-h-64">
           <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-8 max-w-md">
-            <h3 className="text-red-400 text-xl font-bold mb-2">Error Loading Products</h3>
+            <h3 className="text-red-400 text-xl font-bold mb-2">
+              Error Loading Products
+            </h3>
             <p className="text-slate-300">{error}</p>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -80,26 +92,39 @@ function ProductList() {
         <h2 className="text-5xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
           Amazing Products
         </h2>
-        <p className="text-slate-300 text-xl max-w-2xl mx-auto">Discover our curated collection of premium items designed for modern lifestyles</p>
+        <p className="text-slate-300 text-xl max-w-2xl mx-auto">
+          Discover our curated collection of premium items designed for modern
+          lifestyles
+        </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {products.map(product => (
+        {products.map((product) => (
           <div
             key={product.id}
             onClick={() => navigate(`/product/${product.id}`)}
             className="bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-slate-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-cyan-400/20 cursor-pointer"
           >
             <div className="relative overflow-hidden">
-              <img src={product.image} alt={product.name} className="w-full h-56 object-cover transition-transform duration-300 hover:scale-110" />
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-56 object-cover transition-transform duration-300 hover:scale-110"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold text-white mb-2">{product.name}</h3>
-              <p className="text-cyan-400 font-semibold text-lg mb-2">{product.price}</p>
-              <p className="text-slate-400 text-sm mb-4">Stock: {product.quantity}</p>
+              <h3 className="text-xl font-bold text-white mb-2">
+                {product.name}
+              </h3>
+              <p className="text-cyan-400 font-semibold text-lg mb-2">
+                {product.price}
+              </p>
+              <p className="text-slate-400 text-sm mb-4">
+                Stock: {product.quantity}
+              </p>
               <button
                 onClick={(e) => {
-                  e.stopPropagation()
+                  e.stopPropagation();
                   // Add to cart functionality here
                 }}
                 className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
@@ -111,7 +136,7 @@ function ProductList() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default ProductList
+export default ProductList;

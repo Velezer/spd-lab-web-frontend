@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Register({onRegister }) {
+function Register({ onRegister }) {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ function Register({onRegister }) {
 
     try {
       const response = await fetch(
-        "https://spd-lab-backend-db797613f87b.herokuapp.com/api/auth/register",
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`,
         {
           method: "POST",
           headers: {

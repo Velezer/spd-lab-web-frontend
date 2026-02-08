@@ -21,7 +21,9 @@ function Products() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("/api/products");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/products`,
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch products");
       }

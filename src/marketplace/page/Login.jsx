@@ -13,7 +13,7 @@ function Login({ onLogin }) {
 
     try {
       const response = await fetch(
-        "https://spd-lab-backend-db797613f87b.herokuapp.com/api/auth/login",
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
         {
           method: "POST",
           headers: {
