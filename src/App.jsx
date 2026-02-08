@@ -9,6 +9,7 @@ import Register from "./marketplace/page/Register.jsx";
 import Profile from "./marketplace/page/Profile.jsx";
 import ProductDetail from "./marketplace/page/ProductDetail.jsx";
 import Cart from "./marketplace/page/Cart.jsx";
+import Checkout from "./marketplace/page/Checkout.jsx";
 import Orders from "./marketplace/page/Orders.jsx";
 import AdminLayout from "./admin/pages/AdminLayout.jsx";
 import Dashboard from "./admin/pages/Dashboard.jsx";
@@ -102,6 +103,18 @@ function App() {
               <Header user={user} />
               <main className="flex-1">
                 <Cart />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <Checkout />
               </main>
               <Footer />
             </div>

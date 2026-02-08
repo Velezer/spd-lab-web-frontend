@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import OrderClient from "../../api/OrderClient";
 
 function Cart() {
-  const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState(() =>
+    JSON.parse(localStorage.getItem("cart") || "[]"),
+  );
+  const [selectedItems, setSelectedItems] = useState(() =>
+    cartItems.map((item) => item.id),
+  );
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCartItems(cart);
+    OrderClient.init();
   }, []);
 
   const updateQuantity = (id, newQuantity) => {
@@ -20,17 +27,39 @@ function Cart() {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+  const toggleSelection = (id) => {
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
+  };
+
   const removeItem = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
     setCartItems(updatedCart);
+    setSelectedItems((prev) => prev.filter((i) => i !== id));
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => {
-      const price = parseInt(item.price.replace(/[^\d]/g, ""));
-      return total + price * item.quantity;
-    }, 0);
+    return cartItems
+      .filter((item) => selectedItems.includes(item.id))
+      .reduce((total, item) => {
+        const price = parseInt(item.price.replace(/[^\d]/g, ""));
+        return total + price * item.quantity;
+      }, 0);
+  };
+
+  const handleCheckout = () => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    if (selectedItems.length === 0) {
+      alert("Please select at least one item to checkout.");
+      return;
+    }
+    navigate("/checkout", { state: { selectedItems } });
   };
 
   return (
@@ -84,6 +113,12 @@ function Cart() {
                 className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50"
               >
                 <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.id)}
+                    onChange={() => toggleSelection(item.id)}
+                    className="w-5 h-5 text-cyan-400 bg-slate-700 border-slate-600 rounded focus:ring-cyan-400 focus:ring-2"
+                  />
                   <img
                     src={item.image}
                     alt={item.name}
@@ -158,7 +193,10 @@ function Cart() {
                 </div>
               </div>
             </div>
-            <button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl mt-6">
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl mt-6"
+            >
               Proceed to Checkout
             </button>
           </div>

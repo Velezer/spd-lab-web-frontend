@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import OrderClient from "../../api/OrderClient";
 
 function Orders() {
-  // Dummy data untuk tampilan saja
-  const orders = []; // Kosongkan dulu untuk tampilan
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        OrderClient.init();
+        const response = await OrderClient.getOrders();
+        // Handle different possible response structures
+        const ordersData = response.data?.orders || response.data || [];
+        setOrders(Array.isArray(ordersData) ? ordersData : []);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+        setError(err.response?.data?.message || "Failed to load orders");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -15,7 +36,17 @@ function Orders() {
         </p>
       </div>
 
-      {orders.length === 0 ? (
+      {loading ? (
+        <div className="flex justify-center items-center min-h-64">
+          <div className="text-white">Loading orders...</div>
+        </div>
+      ) : error ? (
+        <div className="flex justify-center items-center min-h-64">
+          <div className="bg-red-500/20 border border-red-500/50 text-red-400 p-6 rounded-lg text-center">
+            {error}
+          </div>
+        </div>
+      ) : orders.length === 0 ? (
         <div className="flex justify-center items-center min-h-64">
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-12 border border-slate-700/50 text-center">
             <svg
@@ -46,40 +77,51 @@ function Orders() {
         <div className="space-y-6">
           {orders.map((order) => (
             <div
-              key={order.id}
+              key={order._id}
               className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-white font-semibold text-lg">
-                    Order #{order.id}
+                    Order #{order._id.slice(-8)}
                   </h3>
                   <p className="text-slate-400 text-sm">
-                    Placed on {order.date}
+                    Placed on{" "}
+                    {new Date(order.createdAt).toLocaleDateString("id-ID")}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-cyan-400 font-semibold">
-                    Total: {order.total}
+                    Total: Rp {order.totalPrice.toLocaleString("id-ID")}
                   </p>
-                  <p className="text-slate-400 text-sm">{order.status}</p>
+                  <p className="text-slate-400 text-sm">
+                    {order.status || "Pending"}
+                  </p>
                 </div>
               </div>
               <div className="space-y-2">
                 {order.items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4">
+                  <div key={item._id} className="flex items-center space-x-4">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={
+                        item.product?.imgUrl ||
+                        `https://picsum.photos/300/200?random=${item.product?._id}` ||
+                        "/placeholder-image.jpg"
+                      }
+                      alt={item.product?.name || "Product"}
                       className="w-12 h-12 object-cover rounded"
                     />
                     <div className="flex-1">
-                      <p className="text-white font-medium">{item.name}</p>
+                      <p className="text-white font-medium">
+                        {item.product?.name || "Unknown Product"}
+                      </p>
                       <p className="text-slate-400 text-sm">
                         Qty: {item.quantity}
                       </p>
                     </div>
-                    <p className="text-white">{item.price}</p>
+                    <p className="text-white">
+                      Rp {item.price.toLocaleString("id-ID")}
+                    </p>
                   </div>
                 ))}
               </div>
