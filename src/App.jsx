@@ -11,6 +11,7 @@ import ProductDetail from "./marketplace/page/ProductDetail.jsx";
 import Cart from "./marketplace/page/Cart.jsx";
 import Checkout from "./marketplace/page/Checkout.jsx";
 import Orders from "./marketplace/page/Orders.jsx";
+import OrderDetail from "./marketplace/page/OrderDetail.jsx";
 import AdminLayout from "./admin/pages/AdminLayout.jsx";
 import Dashboard from "./admin/pages/Dashboard.jsx";
 import AdminProducts from "./admin/pages/Products.jsx";
@@ -139,6 +140,18 @@ function App() {
               <Header user={user} />
               <main className="flex-1">
                 <ProductDetail />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/order/:id"
+          element={
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+              <Header user={user} />
+              <main className="flex-1">
+                <OrderDetail />
               </main>
               <Footer />
             </div>

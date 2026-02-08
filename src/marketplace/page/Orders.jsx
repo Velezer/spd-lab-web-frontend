@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import OrderClient from "../../api/OrderClient";
 
 function Orders() {
@@ -97,6 +98,12 @@ function Orders() {
                   <p className="text-slate-400 text-sm">
                     {order.status || "Pending"}
                   </p>
+                  <Link
+                    to={`/order/${order._id}`}
+                    className="inline-block mt-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm"
+                  >
+                    View Details
+                  </Link>
                 </div>
               </div>
               <div className="space-y-2">

@@ -31,6 +31,10 @@ const OrderClient = {
 
     getOrders() {
         return this.axiosInstance.get("/");
+    },
+
+    getOrderById(id) {
+        return this.axiosInstance.get(`/${id}`);
     }
 };
 
