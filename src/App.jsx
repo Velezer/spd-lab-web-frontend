@@ -34,10 +34,11 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      const userId = user.id || user.email || user.username || 'unknown';
+      const userDto = user.user;
+      const userId = userDto.id || userDto.email || userDto.username || 'unknown';
       LogRocket.identify(userId, {
-        name: user.name,
-        email: user.email,
+        name: userDto.name,
+        email: userDto.email,
       });
     }
   }, [user]);
@@ -45,20 +46,22 @@ function App() {
   const handleLogin = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    const userId = userData.id || userData.email || userData.username || 'unknown';
+    const userDto = userData.user;
+    const userId = userDto.id || userDto.email || userDto.username || 'unknown';
     LogRocket.identify(userId, {
-      name: userData.name,
-      email: userData.email,
+      name: userDto.name,
+      email: userDto.email,
     });
   };
 
   const handleRegister = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    const userId = userData.id || userData.email || userData.username || 'unknown';
+    const userDto = userData.user;
+    const userId = userDto.id || userDto.email || userDto.username || 'unknown';
     LogRocket.identify(userId, {
-      name: userData.name,
-      email: userData.email,
+      name: userDto.name,
+      email: userDto.email,
     });
   };
 
