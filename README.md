@@ -1,16 +1,138 @@
-# React + Vite
+# SPD Lab Web Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.2.4-646CFF.svg)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-38B2AC.svg)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Currently, two official plugins are available:
+A modern, responsive web application built with React and Vite, featuring a comprehensive admin panel and a user-friendly marketplace. This project provides a complete e-commerce solution with product management, order processing, and user authentication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+### Admin Panel
+- **Dashboard**: Overview of key metrics and quick access to main functions
+- **Product Management**: Add, edit, delete, and search products with image uploads
+- **Order Management**: View and update order statuses
+- **Profile Management**: Admin user profile and account settings
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Marketplace
+- **Product Catalog**: Browse products with search and filtering
+- **Shopping Cart**: Add/remove items, view cart summary
+- **Checkout Process**: Secure order placement
+- **User Authentication**: Login and registration
+- **Order History**: View past orders and order details
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Frontend**: React 19, Vite
+- **Styling**: Tailwind CSS 4
+- **Routing**: React Router DOM
+- **HTTP Client**: Axios
+- **Build Tool**: Vite
+- **Linting**: ESLint
+
+## 📦 Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/spd-lab-web-frontend.git
+   cd spd-lab-web-frontend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup:**
+   Create a `.env` file in the root directory and add your environment variables:
+   ```env
+   VITE_API_BASE_URL=http://localhost:3001/api
+   ```
+
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser:**
+   Navigate to [http://localhost:5173](http://localhost:5173)
+
+## 🏗️ Project Structure
+
+```
+src/
+├── admin/
+│   ├── components/
+│   │   └── Sidebar.jsx
+│   └── pages/
+│       ├── AdminLayout.jsx
+│       ├── Dashboard.jsx
+│       ├── Products.jsx
+│       ├── Orders.jsx
+│       ├── AdminProfile.jsx
+│       └── OrderDetail.jsx
+├── marketplace/
+│   ├── component/
+│   │   ├── Footer.jsx
+│   │   ├── Header.jsx
+│   │   └── ProductList.jsx
+│   └── page/
+│       ├── Cart.jsx
+│       ├── Checkout.jsx
+│       ├── Login.jsx
+│       ├── OrderDetail.jsx
+│       ├── Orders.jsx
+│       ├── ProductDetail.jsx
+│       ├── Profile.jsx
+│       └── Register.jsx
+├── api/
+│   ├── AuthClient.js
+│   ├── OrderClient.js
+│   └── ProductClient.js
+├── App.jsx
+├── index.css
+└── main.jsx
+```
+
+## 📱 Usage
+
+### Admin Panel
+Navigate to `/admin` to access the admin panel. Use the sidebar to switch between different management sections.
+
+### Marketplace
+The main marketplace is accessible at the root URL `/`. Users can browse products, add to cart, and complete purchases.
+
+## 🔧 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start the development server |
+| `npm run build` | Build the project for production |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint for code quality checks |
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Contact
+
+For questions or support, please open an issue on GitHub.
+
+---
+
+<div align="center">
+  <p>Built with ❤️ using React and Vite</p>
+  <p>
+    <a href="#spd-lab-web-frontend">Back to top</a>
+  </p>
+</div>
